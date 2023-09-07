@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mvvm_pattern/common/my_color.dart';
 import 'package:mvvm_pattern/common/router.dart';
 import 'package:mvvm_pattern/firebase_options.dart';
 
@@ -17,16 +18,16 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(goRouterProvider);
     return MaterialApp.router(
-      debugShowCheckedModeBanner: false,
-      routerConfig: router,
+        debugShowCheckedModeBanner: false,
+        routerConfig: router,
         title: 'Flutter Demo',
         theme: ThemeData(
           // テーマを使ってAppBar全体にスタイルを適用する.
           appBarTheme: const AppBarTheme(
-            backgroundColor: Colors.lightBlueAccent,
+            backgroundColor: MY_COLOR,// commonに好みの色を定数として定義しておく
             foregroundColor: Colors.white,
-            centerTitle: true,
-            elevation: 0,
+            centerTitle: true,// Androidの場合はAppBarのタイトルを中央に配置する
+            elevation: 0,// AppBarの影を消す
           ),
         ));
   }
