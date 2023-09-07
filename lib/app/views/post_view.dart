@@ -3,9 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mvvm_pattern/app/model/infra/user_provider.dart';
 import 'package:mvvm_pattern/app/model/post/post.dart';
-import 'package:mvvm_pattern/app/view_model/post_state.dart';
+import 'package:mvvm_pattern/app/view_model/post_async_notifier.dart';
 import 'package:mvvm_pattern/app/model/infra/firebase_provider.dart';
-import 'package:mvvm_pattern/app/views/person.dart';
+import 'package:mvvm_pattern/app/views/person_view.dart';
 import 'package:mvvm_pattern/auth/repository/auth_service.dart';
 
 class PostView extends ConsumerStatefulWidget {

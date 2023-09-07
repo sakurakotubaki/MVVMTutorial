@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mvvm_pattern/app/model/infra/user_provider.dart';
 import 'package:mvvm_pattern/app/model/user/user.dart';
-import 'package:mvvm_pattern/app/view_model/user_state.dart';
+import 'package:mvvm_pattern/app/view_model/user_async_notifier.dart';
 
 class UserView extends ConsumerStatefulWidget {
   const UserView({super.key});
