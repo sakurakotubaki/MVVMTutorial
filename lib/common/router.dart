@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mvvm_pattern/app/model/post/post.dart';
 import 'package:mvvm_pattern/app/views/post_view.dart';
 import 'package:mvvm_pattern/auth/model/infra/firebase_provider.dart';
 import 'package:mvvm_pattern/auth/views/signin_page.dart';
@@ -9,7 +10,7 @@ import 'package:mvvm_pattern/auth/views/signup_page.dart';
 final goRouterProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authStateChangesProvider);
   return GoRouter(
-    initialLocation: SignInPage.relativePath,
+      initialLocation: SignInPage.relativePath,
       redirect: (BuildContext context, GoRouterState state) async {
         // ログインしていない場合は、ログインページにリダイレクトする
         if (authState.isLoading || authState.hasError) return null;
@@ -53,11 +54,28 @@ final goRouterProvider = Provider<GoRouter>((ref) {
               ),
             ]),
         GoRoute(
-          path: PostView.relativePath,
-          name: PostView.relativePath,
-          builder: (context, state) {
-            return const PostView();
-          },
-        ),
+            path: PostView.relativePath,
+            name: PostView.relativePath,
+            builder: (context, state) {
+              return const PostView();
+            },
+            routes: [
+              // GoRoute(
+              //   path: PostUpdate.relativePath,
+              //   name: PostUpdate.relativePath,
+              //   builder: (context, state) {
+              //     final post = state.extra as Post?;
+              //     if (post != null) {
+              //       return PostUpdate(post: post);
+              //     } else {
+              //       return const Scaffold(
+              //         body: Center(
+              //           child: CircularProgressIndicator(),
+              //         ),
+              //       );
+              //     }
+              //   },
+              // )
+            ]),
       ]);
 });

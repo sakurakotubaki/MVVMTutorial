@@ -4,7 +4,6 @@ import 'package:mvvm_pattern/app/model/post/post.dart';
 import 'package:mvvm_pattern/app/view_model/post_state.dart';
 import 'package:mvvm_pattern/app/model/infra/firebase_provider.dart';
 import 'package:mvvm_pattern/auth/repository/auth_service.dart';
-import 'package:mvvm_pattern/utils/appbar_widget.dart';
 
 class PostView extends ConsumerStatefulWidget {
   const PostView({super.key});
@@ -24,8 +23,7 @@ class _PostViewState extends ConsumerState<PostView> {
   @override
   void initState() {
     _postController.addListener(() {
-      setState(() {
-      });
+      setState(() {});
     });
     super.initState();
   }
@@ -90,18 +88,30 @@ class _PostViewState extends ConsumerState<PostView> {
                     itemCount: posts.length,
                     itemBuilder: (context, index) {
                       return ListTile(
-                        onTap: () {},
                         title: Text(posts[index]!.body),
                         subtitle: Text(posts[index]!.createdAt.toString()),
-                        trailing: IconButton(
-                          icon: const Icon(Icons.delete),
-                          onPressed: () async {
-                            final postId = posts[index]!.id;
-                            var post = Post().copyWith(id: postId);
-                            await ref
-                                .read(postStateAsyncProvider.notifier)
-                                .deletePost(post);
-                          },
+                        trailing: SizedBox(
+                          width: 100,
+                          child: Row(
+                            children: [
+                              IconButton(
+                                  onPressed: () async {
+                                    // ダイアログを表示
+                                    EditDialog(context, posts, index);
+                                  },
+                                  icon: const Icon(Icons.edit)),
+                              IconButton(
+                                icon: const Icon(Icons.delete),
+                                onPressed: () async {
+                                  final postId = posts[index]!.id;
+                                  var post = Post().copyWith(id: postId);
+                                  await ref
+                                      .read(postStateAsyncProvider.notifier)
+                                      .deletePost(post);
+                                },
+                              ),
+                            ],
+                          ),
                         ),
                       );
                     },
@@ -115,5 +125,45 @@ class _PostViewState extends ConsumerState<PostView> {
         ),
       ),
     );
+  }
+
+  Future<void> EditDialog(BuildContext context, List<Post?> posts, int index) {
+    return showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                        title: const Text('編集'),
+                                        content: TextFormField(
+                                          controller: _postController,
+                                          decoration: const InputDecoration(
+                                            hintText: '投稿内容',
+                                            border: OutlineInputBorder(),
+                                          ),
+                                        ),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () async {
+                                              final postId = posts[index]!.id;
+                                              var post = Post(
+                                                id: postId,
+                                                body: _postController.text,
+                                                createdAt:
+                                                    DateTime.timestamp(),
+                                              );
+                                              await ref
+                                                  .read(postStateAsyncProvider
+                                                      .notifier)
+                                                  .updatePost(post);
+                                              _postController.clear();
+                                              if (mounted) {
+                                                Navigator.pop(context);
+                                              }
+                                            },
+                                            child: const Text('更新'),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
   }
 }
