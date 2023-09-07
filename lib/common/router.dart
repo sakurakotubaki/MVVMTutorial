@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mvvm_pattern/app/model/post/post.dart';
+import 'package:mvvm_pattern/app/views/person.dart';
 import 'package:mvvm_pattern/app/views/post_view.dart';
 import 'package:mvvm_pattern/auth/model/infra/firebase_provider.dart';
 import 'package:mvvm_pattern/auth/views/signin_page.dart';
@@ -60,22 +61,13 @@ final goRouterProvider = Provider<GoRouter>((ref) {
               return const PostView();
             },
             routes: [
-              // GoRoute(
-              //   path: PostUpdate.relativePath,
-              //   name: PostUpdate.relativePath,
-              //   builder: (context, state) {
-              //     final post = state.extra as Post?;
-              //     if (post != null) {
-              //       return PostUpdate(post: post);
-              //     } else {
-              //       return const Scaffold(
-              //         body: Center(
-              //           child: CircularProgressIndicator(),
-              //         ),
-              //       );
-              //     }
-              //   },
-              // )
+              GoRoute(
+                path: UserView.relativePath,
+                name: UserView.relativePath,
+                builder: (context, state) {
+                  return const UserView();
+                },
+              )
             ]),
       ]);
 });

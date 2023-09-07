@@ -11,5 +11,5 @@ final authStateChangesProvider = StreamProvider((ref) {
 
 // uidを取得するためのProvider
 final uidProvider = Provider((ref) {
-  return ref.watch(authStateChangesProvider).valueOrNull?.uid;
+  return ref.watch(firebaseAuthProvider).currentUser?.uid;
 });

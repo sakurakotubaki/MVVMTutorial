@@ -13,7 +13,7 @@ final postReferenceWithConverter = Provider.autoDispose((ref) {
       );
 });
 
-// Streamで使用するWithConverter
+
 final poseRefStreamProvider = Provider.autoDispose((ref) {
   return ref.watch(firebaseProvider).collection('post').withConverter<Post?>(// Post? とすることでデータがない場合はnullを返す
       fromFirestore: (ds, _) {

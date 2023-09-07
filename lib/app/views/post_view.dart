@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:mvvm_pattern/app/model/infra/user_provider.dart';
 import 'package:mvvm_pattern/app/model/post/post.dart';
 import 'package:mvvm_pattern/app/view_model/post_state.dart';
 import 'package:mvvm_pattern/app/model/infra/firebase_provider.dart';
+import 'package:mvvm_pattern/app/views/person.dart';
 import 'package:mvvm_pattern/auth/repository/auth_service.dart';
 
 class PostView extends ConsumerStatefulWidget {
@@ -47,6 +50,11 @@ class _PostViewState extends ConsumerState<PostView> {
             },
             icon: const Icon(Icons.logout),
           ),
+          IconButton(
+              onPressed: () {
+                context.goNamed(UserView.relativePath);
+              },
+              icon: const Icon(Icons.person)),
         ],
       ),
       body: Center(
@@ -74,11 +82,15 @@ class _PostViewState extends ConsumerState<PostView> {
                       var post = Post(
                         body: _postController.text,
                         createdAt: DateTime.timestamp(),
+                        updatedAt: DateTime.timestamp(),
                       );
                       await ref
                           .read(postStateAsyncProvider.notifier)
                           .addPost(post);
                       _postController.clear();
+                      /// [強制的更新をかけてデータを取得]
+                      // ignore: unused_result
+                      ref.refresh(userRefFuture);
                     },
                     child: const Text('追加')),
             Expanded(
@@ -129,41 +141,39 @@ class _PostViewState extends ConsumerState<PostView> {
 
   Future<void> EditDialog(BuildContext context, List<Post?> posts, int index) {
     return showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return AlertDialog(
-                                        title: const Text('編集'),
-                                        content: TextFormField(
-                                          controller: _postController,
-                                          decoration: const InputDecoration(
-                                            hintText: '投稿内容',
-                                            border: OutlineInputBorder(),
-                                          ),
-                                        ),
-                                        actions: [
-                                          TextButton(
-                                            onPressed: () async {
-                                              final postId = posts[index]!.id;
-                                              var post = Post(
-                                                id: postId,
-                                                body: _postController.text,
-                                                createdAt:
-                                                    DateTime.timestamp(),
-                                              );
-                                              await ref
-                                                  .read(postStateAsyncProvider
-                                                      .notifier)
-                                                  .updatePost(post);
-                                              _postController.clear();
-                                              if (mounted) {
-                                                Navigator.pop(context);
-                                              }
-                                            },
-                                            child: const Text('更新'),
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('編集'),
+          content: TextFormField(
+            controller: _postController,
+            decoration: const InputDecoration(
+              hintText: '投稿内容',
+              border: OutlineInputBorder(),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () async {
+                final postId = posts[index]!.id;
+                // referenceでデータをコピーする必要がある？。createdAtが上書きされる!
+                var post = const Post().copyWith(
+                    id: postId,
+                    body: _postController.text,
+                    updatedAt: DateTime.timestamp());
+                await ref
+                    .read(postStateAsyncProvider.notifier)
+                    .updatePost(post);
+                _postController.clear();
+                if (mounted) {
+                  Navigator.pop(context);
+                }
+              },
+              child: const Text('更新'),
+            ),
+          ],
+        );
+      },
+    );
   }
 }
