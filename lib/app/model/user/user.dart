@@ -3,19 +3,19 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter/foundation.dart';
 import 'package:mvvm_pattern/common/timestamp_converter.dart';
 
-part 'post.freezed.dart';
-part 'post.g.dart';
+part 'user.freezed.dart';
+part 'user.g.dart';
 
 // flutter pub run build_runner watch --delete-conflicting-outputs
 
 @freezed
-class Post with _$Post {
-  const factory Post({
-    String? id,
-    @Default('') String body,
+class User with _$User {
+  const factory User({
+    @Default('') String name,
     @TimestampConverter() DateTime? createdAt,
-  }) = _Post;
+    @TimestampConverter() DateTime? updatedAt,
+  }) = _User;
 
-  factory Post.fromJson(Map<String, dynamic> json) =>
-      _$PostFromJson(json);
+  factory User.fromJson(Map<String, dynamic> json) =>
+      _$UserFromJson(json);
 }
