@@ -14,6 +14,7 @@ class Post with _$Post {
     String? id,
     @Default('') String body,
     @TimestampConverter() DateTime? createdAt,
+    @TimestampConverter() DateTime? updatedAt,
   }) = _Post;
 
   factory Post.fromJson(Map<String, dynamic> json) =>

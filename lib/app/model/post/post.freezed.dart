@@ -24,6 +24,8 @@ mixin _$Post {
   String get body => throw _privateConstructorUsedError;
   @TimestampConverter()
   DateTime? get createdAt => throw _privateConstructorUsedError;
+  @TimestampConverter()
+  DateTime? get updatedAt => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -36,7 +38,10 @@ abstract class $PostCopyWith<$Res> {
       _$PostCopyWithImpl<$Res, Post>;
   @useResult
   $Res call(
-      {String? id, String body, @TimestampConverter() DateTime? createdAt});
+      {String? id,
+      String body,
+      @TimestampConverter() DateTime? createdAt,
+      @TimestampConverter() DateTime? updatedAt});
 }
 
 /// @nodoc
@@ -55,6 +60,7 @@ class _$PostCopyWithImpl<$Res, $Val extends Post>
     Object? id = freezed,
     Object? body = null,
     Object? createdAt = freezed,
+    Object? updatedAt = freezed,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
@@ -69,6 +75,10 @@ class _$PostCopyWithImpl<$Res, $Val extends Post>
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      updatedAt: freezed == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
     ) as $Val);
   }
 }
@@ -80,7 +90,10 @@ abstract class _$$_PostCopyWith<$Res> implements $PostCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {String? id, String body, @TimestampConverter() DateTime? createdAt});
+      {String? id,
+      String body,
+      @TimestampConverter() DateTime? createdAt,
+      @TimestampConverter() DateTime? updatedAt});
 }
 
 /// @nodoc
@@ -95,6 +108,7 @@ class __$$_PostCopyWithImpl<$Res> extends _$PostCopyWithImpl<$Res, _$_Post>
     Object? id = freezed,
     Object? body = null,
     Object? createdAt = freezed,
+    Object? updatedAt = freezed,
   }) {
     return _then(_$_Post(
       id: freezed == id
@@ -109,6 +123,10 @@ class __$$_PostCopyWithImpl<$Res> extends _$PostCopyWithImpl<$Res, _$_Post>
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      updatedAt: freezed == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
     ));
   }
 }
@@ -117,7 +135,10 @@ class __$$_PostCopyWithImpl<$Res> extends _$PostCopyWithImpl<$Res, _$_Post>
 @JsonSerializable()
 class _$_Post with DiagnosticableTreeMixin implements _Post {
   const _$_Post(
-      {this.id, this.body = '', @TimestampConverter() this.createdAt});
+      {this.id,
+      this.body = '',
+      @TimestampConverter() this.createdAt,
+      @TimestampConverter() this.updatedAt});
 
   factory _$_Post.fromJson(Map<String, dynamic> json) => _$$_PostFromJson(json);
 
@@ -129,10 +150,13 @@ class _$_Post with DiagnosticableTreeMixin implements _Post {
   @override
   @TimestampConverter()
   final DateTime? createdAt;
+  @override
+  @TimestampConverter()
+  final DateTime? updatedAt;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'Post(id: $id, body: $body, createdAt: $createdAt)';
+    return 'Post(id: $id, body: $body, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -142,7 +166,8 @@ class _$_Post with DiagnosticableTreeMixin implements _Post {
       ..add(DiagnosticsProperty('type', 'Post'))
       ..add(DiagnosticsProperty('id', id))
       ..add(DiagnosticsProperty('body', body))
-      ..add(DiagnosticsProperty('createdAt', createdAt));
+      ..add(DiagnosticsProperty('createdAt', createdAt))
+      ..add(DiagnosticsProperty('updatedAt', updatedAt));
   }
 
   @override
@@ -153,12 +178,14 @@ class _$_Post with DiagnosticableTreeMixin implements _Post {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.body, body) || other.body == body) &&
             (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt));
+                other.createdAt == createdAt) &&
+            (identical(other.updatedAt, updatedAt) ||
+                other.updatedAt == updatedAt));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, body, createdAt);
+  int get hashCode => Object.hash(runtimeType, id, body, createdAt, updatedAt);
 
   @JsonKey(ignore: true)
   @override
@@ -178,7 +205,8 @@ abstract class _Post implements Post {
   const factory _Post(
       {final String? id,
       final String body,
-      @TimestampConverter() final DateTime? createdAt}) = _$_Post;
+      @TimestampConverter() final DateTime? createdAt,
+      @TimestampConverter() final DateTime? updatedAt}) = _$_Post;
 
   factory _Post.fromJson(Map<String, dynamic> json) = _$_Post.fromJson;
 
@@ -189,6 +217,9 @@ abstract class _Post implements Post {
   @override
   @TimestampConverter()
   DateTime? get createdAt;
+  @override
+  @TimestampConverter()
+  DateTime? get updatedAt;
   @override
   @JsonKey(ignore: true)
   _$$_PostCopyWith<_$_Post> get copyWith => throw _privateConstructorUsedError;

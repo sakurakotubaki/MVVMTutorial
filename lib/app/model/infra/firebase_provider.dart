@@ -1,23 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mvvm_pattern/app/model/post.dart';
+import 'package:mvvm_pattern/app/model/post/post.dart';
 
 // Firebaseを利用するためのProvider
 final firebaseProvider = Provider((ref) => FirebaseFirestore.instance);
-
-// FirebaseAuthを利用するためのProvider
-final firebaseAuthProvider = Provider((ref) => FirebaseAuth.instance);
-
-// 認証状態を監視するためのProvider
-final authStateChangesProvider = StreamProvider((ref) {
-  return ref.watch(firebaseAuthProvider).authStateChanges();
-});
-
-// uidを取得するためのProvider
-final uidProvider = Provider((ref) {
-  return ref.watch(authStateChangesProvider).valueOrNull?.uid;
-});
 
 // メソッドで使用するWithConverter
 final postReferenceWithConverter = Provider.autoDispose((ref) {

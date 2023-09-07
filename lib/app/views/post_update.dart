@@ -2,20 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mvvm_pattern/app/model/post/post.dart';
 import 'package:mvvm_pattern/app/view_model/post_state.dart';
-import 'package:mvvm_pattern/app/model/infra/firebase_provider.dart';
-import 'package:mvvm_pattern/auth/repository/auth_service.dart';
 import 'package:mvvm_pattern/utils/appbar_widget.dart';
 
-class PostView extends ConsumerStatefulWidget {
-  const PostView({super.key});
+class PostUpdate extends ConsumerStatefulWidget {
+  const PostUpdate({super.key, required this.post});
 
-  static const String relativePath = '/post_view';
+  final Post post;
+
+  static const String relativePath = '/post_update';
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _PostViewState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _PostUpdateState();
 }
 
-class _PostViewState extends ConsumerState<PostView> {
+class _PostUpdateState extends ConsumerState<PostUpdate> {
   final _postController = TextEditingController();
   // ゲッターで_postControllerの値がnullかどうかを判定
   bool get _isPostControllerEmpty => _postController.text.isEmpty;
@@ -24,8 +24,7 @@ class _PostViewState extends ConsumerState<PostView> {
   @override
   void initState() {
     _postController.addListener(() {
-      setState(() {
-      });
+      setState(() {});
     });
     super.initState();
   }
@@ -39,18 +38,8 @@ class _PostViewState extends ConsumerState<PostView> {
 
   @override
   Widget build(BuildContext context) {
-    final postData = ref.watch(postRefStream);
     return Scaffold(
-      appBar: AppBar(
-        actions: [
-          IconButton(
-            onPressed: () async {
-              await ref.read(authServiceProvider).signOut();
-            },
-            icon: const Icon(Icons.logout),
-          ),
-        ],
-      ),
+      appBar: WidgetUtils.createAppBar('編集ページ'),
       body: Center(
         child: Column(
           children: [
@@ -79,38 +68,10 @@ class _PostViewState extends ConsumerState<PostView> {
                       );
                       await ref
                           .read(postStateAsyncProvider.notifier)
-                          .addPost(post);
+                          .updatePost(post);
                       _postController.clear();
                     },
                     child: const Text('追加')),
-            Expanded(
-              child: postData.when(
-                data: (posts) {
-                  return ListView.builder(
-                    itemCount: posts.length,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        onTap: () {},
-                        title: Text(posts[index]!.body),
-                        subtitle: Text(posts[index]!.createdAt.toString()),
-                        trailing: IconButton(
-                          icon: const Icon(Icons.delete),
-                          onPressed: () async {
-                            final postId = posts[index]!.id;
-                            var post = Post().copyWith(id: postId);
-                            await ref
-                                .read(postStateAsyncProvider.notifier)
-                                .deletePost(post);
-                          },
-                        ),
-                      );
-                    },
-                  );
-                },
-                error: (_, __) => const Center(child: Text('エラーが発生しました')),
-                loading: () => const Center(child: CircularProgressIndicator()),
-              ),
-            ),
           ],
         ),
       ),
